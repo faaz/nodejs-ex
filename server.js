@@ -3,7 +3,7 @@ const port = 8080;
 var onRequest = function(req, res){
   console.log(req.method+': '+req.url);
   res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.write('You have successfully started a server!');
+  res.write('Hello World!');
   res.end();
 }
 http.createServer(onRequest).listen(port);
