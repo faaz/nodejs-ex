@@ -1,10 +1,27 @@
-const http = require('http');
+restify = require('restify');
+
+
 const port = 8080;
-var onRequest = function(req, res){
-  console.log(req.method+': '+req.url);
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.write('Hello Team Uniform!');
-  res.end();
-}
-http.createServer(onRequest).listen(port);
-console.log('Server listening on port '+ port);
+
+server = restify.createServer();
+server.listen(port);
+server.use(restify.bodyParser());
+server.use(restify.queryParser());
+server.on('uncaughtException', function (req, res, route, err) {
+    console.log('uncaughtException', err.stack);
+});
+
+var login = require('./login');
+
+server.post('/signup', login.signUp);
+
+server.post({url:'/login'}, login.loginRoute);
+server.get({url:'/hello'}, login.helloRoute);
+
+
+
+
+
+server.listen(port, function(){
+    console.log('%s is listening at %s', server.name, server.url);
+});
